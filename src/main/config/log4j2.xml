@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Properties>
+        <Property name="logs">logs</Property>
+        <Property name="logsOld">logs/archive</Property>
+        <!--levels: off; error; warn; info; debug; trace-->
+        <Property name="fileLoggingLvl">info</Property>
+        <Property name="consoleLoggingLvl">info</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d %p %c{10} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </Console>
+        <RollingFile name="RollingFile" fileName="${logs}/spring-quartz-example.log"
+                     filePattern="${logsOld}/spring-quartz-example-%d{yyyy-MM-dd}.log.zip">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d %p %c{10} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${logsOld}" maxDepth="1">
+                    <IfFileName glob="spring-quartz-example-*.log.zip">
+                        <IfAny>
+                            <IfAccumulatedFileCount exceeds="14" />
+                        </IfAny>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <!--logs SQL statements when logging lvl is debug or lower-->
+        <Logger name="org.hibernate.SQL" level="trace" additivity="false">
+            <AppenderRef ref="Console" level="${consoleLoggingLvl}"/>
+            <AppenderRef ref="RollingFile" level="${fileLoggingLvl}"/>
+        </Logger>
+        <!--logs SQL variables when logging lvl is trace-->
+        <Logger name="org.hibernate.type.descriptor.sql" level="trace" additivity="false">
+            <AppenderRef ref="Console" level="${consoleLoggingLvl}"/>
+            <AppenderRef ref="RollingFile" level="${fileLoggingLvl}"/>
+        </Logger>
+        <!--just to be able to change logging level for our classes separately-->
+        <Logger name="com.algolytics" level="trace" additivity="false">
+            <AppenderRef ref="Console" level="${consoleLoggingLvl}"/>
+            <AppenderRef ref="RollingFile" level="${fileLoggingLvl}"/>
+        </Logger>
+        <Root level="trace">
+            <AppenderRef ref="Console" level="${consoleLoggingLvl}"/>
+            <AppenderRef ref="RollingFile" level="${fileLoggingLvl}"/>
+        </Root>
+    </Loggers>
+</Configuration>
