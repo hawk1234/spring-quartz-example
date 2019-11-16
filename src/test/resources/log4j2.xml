@@ -24,7 +24,7 @@
             <AppenderRef ref="Console" level="${consoleLoggingLvl}"/>
         </Logger>
         <!--just to be able to change logging level for our classes separately-->
-        <Logger name="com.algolytics" level="trace" additivity="false">
+        <Logger name="com.mz" level="trace" additivity="false">
             <AppenderRef ref="Console" level="${consoleLoggingLvl}"/>
         </Logger>
         <Root level="trace">
