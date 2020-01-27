@@ -48,7 +48,7 @@ job class | Class of implemented *Job* that will be instantiated during job exec
 key | Unique job identifier - *JobKey* - consists of job name and group | yes | N/A
 job data | Parameters (key, value) with which job will be executed. **Parameters will be available for every job execution**. Represented by *JobDataMap* | no | empty *JobDataMap*
 durable | Indicates that job should be kept in underlying *JobStore* when there are no *Trigger*-s associated with it | no | false
-request recovery | Informs *Quartz* whether the job should be re-executed when it wasn't finished successfully (*Job* throws exception or JVM shutdown) | no | false
+request recovery | Informs *Quartz* whether the job should be re-executed when it wasn't finished successfully **as a result of JVM shutdown** | no | false
 
 Other configuration:
 
@@ -76,9 +76,8 @@ misfire instruction | Determines how trigger should behave when it missed its fi
 invoked the execution. **Allows to retrieve merged *JobDataMap* that contains parameters from both *JobDetail* and
 *Trigger***. *Trigger* parameters override *JobDetail* parameters with the same names.
 * *JobExecutionException* - special exception that can be thrown by *Job* to indicated that *Job* 
-should re-fire immediately or that *Trigger* associated with the job should be unscheduled. **It is not
-required to throw this exception when *JobDetail* request recovery property is set to `true`**, in such case
-job will be re-fired anyway.
+should re-fire immediately or that *Trigger* associated with the job should be unscheduled. **NOTE:** For what
+I tested in such situation *Job* is being executed constantly on the same node when clustering is used.
 
 #### 2. More terminology
 * Fail-over - occurs when one of the nodes fails while in the midst of executing one or more jobs. 
