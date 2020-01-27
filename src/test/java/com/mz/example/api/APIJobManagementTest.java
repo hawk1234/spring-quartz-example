@@ -85,8 +85,8 @@ public class APIJobManagementTest extends AbstractApplicationTest {
 
     @Test
     public void testScheduleJobReturnsExistingJobIdWhenThereIsJobAwaitingExecution() throws Exception {
-        Mockito.doAnswer(new AnswersWithDelay(5000, invocation -> null)).when(myJobService).doStuff();
-        String job1 = performTestScheduleJob();//This job might be started
+        Mockito.doAnswer(new AnswersWithDelay(3000, invocation -> null)).when(myJobService).doStuff();
+        String job1 = waitJobStarted(performTestScheduleJob());//This job should be started to perform test
         String job2 = performTestScheduleJob();//This job should have ~3s before being started
         String expectedJob2Id = performTestScheduleJob();
         try {

@@ -30,6 +30,11 @@ public abstract class AbstractApplicationTest {
         return schedulerService.scheduleJob();
     }
 
+    protected String waitJobStarted(String jobId) throws InterruptedException{
+        TestUtil.conditionalWait(() -> Objects.isNull(schedulerService.getJobStatus(jobId).getJobStarted()));
+        return jobId;
+    }
+
     protected String waitJobFinished(String jobId) throws InterruptedException{
         TestUtil.conditionalWait(() -> Objects.isNull(schedulerService.getJobStatus(jobId).getJobFinished()));
         return jobId;
